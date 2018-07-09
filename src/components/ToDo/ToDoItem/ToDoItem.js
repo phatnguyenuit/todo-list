@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
 import Select from 'react-select';
+import {Icon} from 'react-fa'
 import 'react-select/dist/react-select.css';
+
+const icons = {
+    'doing': 'spinner',
+    'not-yet': 'anchor',
+    'done': 'check-square',
+    'canceled': 'trash',
+    'default': 'info'
+};
 
 class ToDoItem extends Component {
     constructor(props) {
@@ -22,6 +31,28 @@ class ToDoItem extends Component {
         data['name'] = e.target.value;
         this.setState({data});
     }
+
+    onChangeLabels = e => {
+        e.preventDefault();
+        let data = this.state.data;
+        data['labels'] = e.target.value;
+        this.setState({data});
+    }
+
+    onChangePriority = e => {
+        e.preventDefault();
+        let data = this.state.data;
+        data['priority'] = e.target.value;
+        this.setState({data});
+    }
+
+    onChangeAssignees = e => {
+        e.preventDefault();
+        let data = this.state.data;
+        data['assignees'] = e.target.value;
+        this.setState({data});
+    }
+
     onSaveAction = e => {
         e.preventDefault();
         this.setState({
@@ -53,6 +84,7 @@ class ToDoItem extends Component {
                 { value: 'canceled', label: 'Hủy bỏ' },
                 ]}
                 clearable={false}
+                optionClassName="primary"
             />
         );
         if (editMode){
@@ -60,22 +92,26 @@ class ToDoItem extends Component {
                 <tr>
                     <td>{this.props.order + 1}</td>
                     <td>
-                        <input value={name} onChange={this.onChangeName}/>
+                        <input value={name} onChange={this.onChangeName} className="form-control"/>
                     </td>
-                    <td>{labels}</td>
-                    <td>{priority}</td>
-                    <td>{assignees}</td>
                     <td>
-                        <div className="col-xs-12">
-                            <div className="col-xs-4">
-                                <button className="btn btn-primary" onClick={this.onSaveAction}>Save</button>
-                            </div>
-                            <div className="col-xs-8">
-                            {selectHtml}
-                            </div>
-                        </div>
+                        <input value={labels} onChange={this.onChangeLabels} className="form-control"/>
                     </td>
-                    <td>{status}</td>
+                    <td>
+                        <input value={priority} onChange={this.onChangePriority} className="form-control"/>
+                    </td>
+                    <td>
+                        <input value={assignees} onChange={this.onChangeAssignees} className="form-control"/>
+                    </td>
+                    <td width="20px">
+                        <button className="btn btn-primary" onClick={this.onSaveAction}>Save</button>
+                    </td>
+                    <td>
+                        {selectHtml}
+                    </td>
+                    <td>
+                        <Icon name={icons[status]} />
+                    </td>
                 </tr>
             );
         }
@@ -87,17 +123,15 @@ class ToDoItem extends Component {
                     <td>{labels}</td>
                     <td>{priority}</td>
                     <td>{assignees}</td>
-                    <td>
-                       <div className="col-xs-12">
-                            <div className="col-xs-4">
-                                <button className="btn btn-danger" onClick={this.onEditAction}>Sửa</button>
-                            </div>
-                            <div className="col-xs-8">
-                            {selectHtml}
-                            </div>
-                        </div>
+                    <td width="20px">
+                        <button className="btn btn-danger" onClick={this.onEditAction}>Sửa</button>
                     </td>
-                    <td>{status}</td>
+                    <td>
+                        {selectHtml}
+                    </td>
+                    <td>
+                        <Icon name={icons[status]} />
+                    </td>
                 </tr>
             );
         }
